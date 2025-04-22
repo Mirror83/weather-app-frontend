@@ -1,6 +1,39 @@
-import { ForecastCard } from "./forecast-card";
+import { addDays } from "date-fns";
+import { ForecastCard, ForecastData } from "./forecast-card";
 import { Humidity } from "./humidity";
 import { WindStatus } from "./wind-status";
+
+const today = new Date();
+
+const forecastData: ForecastData[] = [
+  {
+    date: addDays(today, 1).toISOString(),
+    tempMin: "15",
+    tempMax: "25",
+    weather: {
+      icon: "sunny",
+      description: "Sunny",
+    },
+  },
+  {
+    date: addDays(today, 2).toISOString(),
+    tempMin: "16",
+    tempMax: "26",
+    weather: {
+      icon: "cloudy",
+      description: "Cloudy",
+    },
+  },
+  {
+    date: addDays(today, 3).toISOString(),
+    tempMin: "17",
+    tempMax: "27",
+    weather: {
+      icon: "rainy",
+      description: "Rainy",
+    },
+  },
+];
 
 export function Body() {
   return (
@@ -28,9 +61,9 @@ export function Body() {
       <div>
         <h2 className="my-4 font-bold">Three-Day Forecast</h2>
         <div className="my-4 grid grid-cols-2 gap-4 lg:grid-cols-3">
-          <ForecastCard />
-          <ForecastCard />
-          <ForecastCard />
+          {forecastData.map((data) => (
+            <ForecastCard key={data.date} data={data} />
+          ))}
         </div>
       </div>
       <div>
