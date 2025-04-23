@@ -1,7 +1,9 @@
 import { BodyData, TemperatureUnit } from "@/lib/types";
-import { ForecastCard } from "./forecast-card";
-import { Humidity } from "./humidity";
-import { WindStatus } from "./wind-status";
+import { ForecastCard } from "@/components/forecast-card";
+import { Humidity } from "@/components/humidity";
+import { WindStatus } from "@/components/wind-status";
+import { Search } from "@/components/search";
+import { TemperatureUnitButtons } from "./temperature-unit-buttons";
 
 type BodyProps = {
   data: BodyData;
@@ -21,14 +23,8 @@ export function Body({ data, temperatureUnit }: BodyProps) {
       </div>
 
       <div className="my-4 flex flex-row flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-row items-center gap-2">
-          <input className="input w-72" placeholder="Search city..." />
-          <button className="btn btn-primary">Search</button>
-        </div>
-        <div className="btn-group btn-group-scrollable">
-          <button className="btn btn-active">°C</button>
-          <button className="btn">°F</button>
-        </div>
+        <Search />
+        <TemperatureUnitButtons />
       </div>
 
       <div>
