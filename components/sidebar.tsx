@@ -1,6 +1,14 @@
-import { CloudFog, Rainbow } from "lucide-react";
+import { getTemperature } from "@/lib/conversions";
+import { Rainbow } from "lucide-react";
+import { WeatherIcon } from "./weather-icon";
+import { SidebarData } from "@/lib/types";
 
-export function Sidebar() {
+type SidebarProps = {
+  data?: SidebarData;
+  temperatureUnit: "celsius" | "fahrenheit";
+};
+
+export function Sidebar({ data, temperatureUnit }: SidebarProps) {
   return (
     <div className="sm:w-full sm:max-w-[18rem]">
       <input
@@ -19,9 +27,20 @@ export function Sidebar() {
           </div>
         </section>
         <section className="sidebar-content items-center justify-center p-4">
-          <CloudFog size={64} className="mb-4" />
-          <p className="text-xl">13°C</p>
-          <p className="text-2xl font-bold">Cloudy</p>
+          {data && (
+            <>
+              {/* <CloudFog size={64} className="mb-4" /> */}
+              <WeatherIcon
+                iconId={data.icon}
+                size={64}
+                description={data.main}
+              />
+              <p className="text-xl">
+                {getTemperature(data.temp, temperatureUnit)}
+              </p>
+              <p className="text-2xl font-bold">{data.description}</p>
+            </>
+          )}
         </section>
         <section className="sidebar-footer justify-end bg-gray-2 pt-2">
           {/* <div className="divider my-0"></div> */}
@@ -34,7 +53,9 @@ export function Sidebar() {
                       dateStyle: "medium",
                     })}
                   </span>
-                  <span className="text-xl font-bold">Nairobi</span>
+                  {data && (
+                    <span className="text-xl font-bold">{data.city}</span>
+                  )}
                 </div>
               </div>
             </label>

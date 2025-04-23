@@ -1,20 +1,18 @@
-import { SunIcon } from "lucide-react";
-
-export interface ForecastData {
-  date: string;
-  tempMin: string;
-  tempMax: string;
-  weather: {
-    icon: string;
-    description: string;
-  };
-}
+import { WeatherIcon } from "./weather-icon";
+import { getTemperature, getTemperatureUnitSymbol } from "@/lib/conversions";
+import { Forecast, TemperatureUnit } from "@/lib/types";
 
 type ForecastCardProps = {
-  data: ForecastData;
+  data: Forecast;
+  temperatureUnit: TemperatureUnit;
 };
 
-export function ForecastCard({ data }: ForecastCardProps) {
+export function ForecastCard({ data, temperatureUnit }: ForecastCardProps) {
+  const { icon, description } = data.weather;
+  const symbol = getTemperatureUnitSymbol(temperatureUnit);
+  const maxTemp = Math.round(getTemperature(data.max_temp, temperatureUnit));
+  const minTemp = Math.round(getTemperature(data.min_temp, temperatureUnit));
+
   return (
     <div className="card">
       <div className="card-body items-center">
@@ -24,10 +22,10 @@ export function ForecastCard({ data }: ForecastCardProps) {
             month: "short",
           })}
         </h2>
-        <SunIcon size={64} />
+        <WeatherIcon iconId={icon} size={64} description={description} />
         <div className="card-footer">
           <p className="text-content2">
-            {data.tempMin}-{data.tempMax}°C
+            {maxTemp + symbol} - {minTemp + symbol}
           </p>
         </div>
       </div>

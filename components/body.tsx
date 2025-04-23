@@ -1,41 +1,14 @@
-import { addDays } from "date-fns";
-import { ForecastCard, ForecastData } from "./forecast-card";
+import { BodyData, TemperatureUnit } from "@/lib/types";
+import { ForecastCard } from "./forecast-card";
 import { Humidity } from "./humidity";
 import { WindStatus } from "./wind-status";
 
-const today = new Date();
+type BodyProps = {
+  data: BodyData;
+  temperatureUnit: TemperatureUnit;
+};
 
-const forecastData: ForecastData[] = [
-  {
-    date: addDays(today, 1).toISOString(),
-    tempMin: "15",
-    tempMax: "25",
-    weather: {
-      icon: "sunny",
-      description: "Sunny",
-    },
-  },
-  {
-    date: addDays(today, 2).toISOString(),
-    tempMin: "16",
-    tempMax: "26",
-    weather: {
-      icon: "cloudy",
-      description: "Cloudy",
-    },
-  },
-  {
-    date: addDays(today, 3).toISOString(),
-    tempMin: "17",
-    tempMax: "27",
-    weather: {
-      icon: "rainy",
-      description: "Rainy",
-    },
-  },
-];
-
-export function Body() {
+export function Body({ data, temperatureUnit }: BodyProps) {
   return (
     <div className="flex w-full flex-col p-4">
       <div className="w-fit">
@@ -61,16 +34,20 @@ export function Body() {
       <div>
         <h2 className="my-4 font-bold">Three-Day Forecast</h2>
         <div className="my-4 grid grid-cols-2 gap-4 lg:grid-cols-3">
-          {forecastData.map((data) => (
-            <ForecastCard key={data.date} data={data} />
+          {data.forecastData.map((forecast) => (
+            <ForecastCard
+              key={forecast.date}
+              data={forecast}
+              temperatureUnit={temperatureUnit}
+            />
           ))}
         </div>
       </div>
       <div>
         <h2 className="my-4 font-bold">Additional info</h2>
         <div className="my-4 grid grid-cols-2 gap-4">
-          <WindStatus />
-          <Humidity />
+          <WindStatus data={data.wind} />
+          <Humidity value={data.humidity} />
         </div>
       </div>
     </div>
