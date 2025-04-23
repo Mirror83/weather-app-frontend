@@ -1,4 +1,4 @@
-import { getTemperature } from "@/lib/conversions";
+import { getTemperature, getTemperatureUnitSymbol } from "@/lib/conversions";
 import { Rainbow } from "lucide-react";
 import { WeatherIcon } from "./weather-icon";
 import { SidebarData } from "@/lib/types";
@@ -18,50 +18,73 @@ export function Sidebar({ data, temperatureUnit }: SidebarProps) {
       />
       <label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay"></label>
       <aside className="sidebar sidebar-fixed-left sidebar-mobile h-full justify-start max-sm:fixed max-sm:-translate-x-full">
-        <section className="sidebar-title items-center justify-center p-4 font-normal">
-          <div className="flex flex-col items-center">
-            <div className="flex flex-row gap-2">
-              <Rainbow />
-              <h1>Weather App</h1>
-            </div>
-          </div>
-        </section>
-        <section className="sidebar-content items-center justify-center p-4">
-          {data && (
-            <>
-              {/* <CloudFog size={64} className="mb-4" /> */}
-              <WeatherIcon
-                iconId={data.icon}
-                size={64}
-                description={data.main}
-              />
-              <p className="text-xl">
-                {getTemperature(data.temp, temperatureUnit)}
-              </p>
-              <p className="text-2xl font-bold">{data.description}</p>
-            </>
-          )}
-        </section>
-        <section className="sidebar-footer justify-end bg-gray-2 pt-2">
-          {/* <div className="divider my-0"></div> */}
-          <div className="z-50 flex h-fit w-full">
-            <label className="whites mx-2 flex h-fit w-full justify-center p-0 text-center">
-              <div className="flex flex-row gap-4 p-4">
-                <div className="flex flex-col">
-                  <span className="text-sm">
-                    {new Date().toLocaleDateString(undefined, {
-                      dateStyle: "medium",
-                    })}
-                  </span>
-                  {data && (
-                    <span className="text-xl font-bold">{data.city}</span>
-                  )}
-                </div>
-              </div>
-            </label>
-          </div>
-        </section>
+        <SidebarHeader />
+        <SidebarContent data={data} temperatureUnit={temperatureUnit} />
+        <SidebarFooter data={data} />
       </aside>
     </div>
+  );
+}
+
+function SidebarHeader() {
+  return (
+    <section className="sidebar-title items-center justify-center p-4 font-normal">
+      <div className="flex flex-col items-center">
+        <div className="flex flex-row gap-2">
+          <Rainbow />
+          <h1>Weather App</h1>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SidebarFooter({ data }: { data: SidebarData | undefined }) {
+  if (!data) {
+    return null;
+  }
+  return (
+    <section className="sidebar-footer justify-end bg-gray-2 pt-2">
+      {/* <div className="divider my-0"></div> */}
+      <div className="z-50 flex h-fit w-full">
+        <label className="whites mx-2 flex h-fit w-full justify-center p-0 text-center">
+          <div className="flex flex-row gap-4 p-4">
+            <div className="flex flex-col">
+              <span className="text-sm">
+                {new Date().toLocaleDateString(undefined, {
+                  dateStyle: "medium",
+                })}
+              </span>
+              {data && <span className="text-xl font-bold">{data.city}</span>}
+            </div>
+          </div>
+        </label>
+      </div>
+    </section>
+  );
+}
+
+type SidebarContentProps = {} & SidebarProps;
+
+function SidebarContent({ data, temperatureUnit }: SidebarContentProps) {
+  if (!data) {
+    return (
+      <section className="sidebar-content items-center justify-center p-4">
+        <p className="text-xl">No data available</p>
+      </section>
+    );
+  }
+
+  const temp = Math.round(getTemperature(data.temp, temperatureUnit));
+  const symbol = getTemperatureUnitSymbol(temperatureUnit);
+  const description =
+    data.description.charAt(0).toUpperCase() + data.description.slice(1);
+
+  return (
+    <section className="sidebar-content items-center justify-center p-4">
+      <WeatherIcon iconId={data.icon} size={64} description={data.main} />
+      <p className="text-xl">{temp + symbol}</p>
+      <p className="text-2xl font-bold">{description}</p>
+    </section>
   );
 }
