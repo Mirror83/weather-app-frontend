@@ -4,13 +4,17 @@ import { Humidity } from "@/components/humidity";
 import { WindStatus } from "@/components/wind-status";
 import { Search } from "@/components/search";
 import { TemperatureUnitButtons } from "./temperature-unit-buttons";
+import { NoData } from "./no-data";
 
 type BodyProps = {
-  data: BodyData;
+  data?: BodyData;
   temperatureUnit: TemperatureUnit;
 };
 
 export function Body({ data, temperatureUnit }: BodyProps) {
+  if (!data) {
+    return <NoData />;
+  }
   return (
     <div className="flex w-full flex-col p-4">
       <div className="w-fit">

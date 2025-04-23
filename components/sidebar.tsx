@@ -2,6 +2,7 @@ import { getTemperature, getTemperatureUnitSymbol } from "@/lib/conversions";
 import { Rainbow } from "lucide-react";
 import { WeatherIcon } from "./weather-icon";
 import { SidebarData } from "@/lib/types";
+import { Frown } from "lucide-react";
 
 type SidebarProps = {
   data?: SidebarData;
@@ -70,7 +71,7 @@ function SidebarContent({ data, temperatureUnit }: SidebarContentProps) {
   if (!data) {
     return (
       <section className="sidebar-content items-center justify-center p-4">
-        <p className="text-xl">No data available</p>
+        <Frown size={64} />
       </section>
     );
   }
