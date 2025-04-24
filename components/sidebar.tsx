@@ -78,14 +78,16 @@ function SidebarContent({ data, temperatureUnit }: SidebarContentProps) {
 
   const temp = Math.round(getTemperature(data.temp, temperatureUnit));
   const symbol = getTemperatureUnitSymbol(temperatureUnit);
-  const description =
-    data.description.charAt(0).toUpperCase() + data.description.slice(1);
 
   return (
     <section className="sidebar-content items-center justify-center p-4">
-      <WeatherIcon iconId={data.icon} size={64} description={data.main} />
+      <WeatherIcon
+        iconId={data.icon}
+        size={64}
+        description={data.description}
+      />
       <p className="text-xl">{temp + symbol}</p>
-      <p className="text-2xl font-bold">{description}</p>
+      <p className="text-2xl font-bold">{data.main}</p>
     </section>
   );
 }
